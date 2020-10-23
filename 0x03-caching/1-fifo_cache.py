@@ -16,8 +16,9 @@ class FIFOCache(BaseCaching):
     def put(self, key, item):
         ''' Assign the item to the dictionary '''
         if key and item:
-            if not self.cache_data.get(key):
-                self.queue.append(key)
+            if self.cache_data.get(key):
+                self.queue.remove(key)
+            self.queue.append(key)
             self.cache_data[key] = item
             if len(self.queue) > self.MAX_ITEMS:
                 delete = self.queue.pop(0)
