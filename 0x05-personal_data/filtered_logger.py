@@ -5,7 +5,10 @@ Return the log message obfuscated
 
 import re
 import logging
+import csv
 from typing import List
+
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
 class RedactingFormatter(logging.Formatter):
@@ -36,3 +39,15 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     for f in fields:
         message = re.sub(f'(?<={f}=)[^{separator}]*', redaction, message)
     return message
+
+
+def get_logger() -> logging.Logger:
+    """Return a logging.Logger object
+    """
+    log = logging.getLogger('user_data')
+    log.setLevel(logging.INFO)
+    log.propagate = False
+    handler = logging.StreamHandler()
+    hander.setFormatter(RedactingFormatter(PII_FIELDS))
+    log.addHandler(handler)
+    return log
