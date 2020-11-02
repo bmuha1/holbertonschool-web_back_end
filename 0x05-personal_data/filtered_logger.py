@@ -5,8 +5,8 @@ Return the log message obfuscated
 
 import re
 import logging
-import csv
 import os
+import mysql.connector
 from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -55,4 +55,11 @@ def get_logger() -> logging.Logger:
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    return
+    """Return a connector to the database
+    """
+    connector = mysql.connector.connect(
+        user=os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root'),
+        password=os.environ.get('PERSONAL_DATA_DB_PASSWORD', ''),
+        host=os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
+        database=os.environ.get('PERSONAL_DATA_DB_NAME'))
+    return connector
