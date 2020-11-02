@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Return the log message obfuscated
+0x05. Personal data
 """
 
 import re
@@ -75,7 +75,7 @@ def main() -> None:
     for row in cursor:
         s = ''
         for key in row:
-             s += '{}={}; '.format(key, row[key])
+            s += '{}={}; '.format(key, row[key])
         logger.info(s)
     cursor.close()
     db.close()
