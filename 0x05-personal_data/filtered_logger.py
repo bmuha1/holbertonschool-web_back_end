@@ -49,7 +49,7 @@ def get_logger() -> logging.Logger:
     log.setLevel(logging.INFO)
     log.propagate = False
     handler = logging.StreamHandler()
-    hander.setFormatter(RedactingFormatter(PII_FIELDS))
+    handler.setFormatter(RedactingFormatter(PII_FIELDS))
     log.addHandler(handler)
     return log
 
@@ -69,12 +69,14 @@ def main() -> None:
     """Read and filter data
     """
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
     cursor.execute('SELECT * FROM users;')
+    logger = get_logger()
     for row in cursor:
+        s = ''
         for key in row:
-            print('{}={}; '.format(key, row[key]), end='')
-        print()
+             s += '{}={}; '.format(key, row[key])
+        logger.info(s)
     cursor.close()
     db.close()
 
