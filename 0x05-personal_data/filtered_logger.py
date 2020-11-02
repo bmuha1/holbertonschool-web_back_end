@@ -6,6 +6,7 @@ Return the log message obfuscated
 import re
 import logging
 import csv
+import os
 from typing import List
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -51,3 +52,7 @@ def get_logger() -> logging.Logger:
     hander.setFormatter(RedactingFormatter(PII_FIELDS))
     log.addHandler(handler)
     return log
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    return
