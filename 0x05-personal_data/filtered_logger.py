@@ -63,3 +63,21 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         host=os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
         database=os.environ.get('PERSONAL_DATA_DB_NAME'))
     return connector
+
+
+def main() -> None:
+    """Read and filter data
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM users;')
+    for row in cursor:
+        for key in row:
+            print('{}={}; '.format(key, row[key]), end='')
+        print()
+    cursor.close()
+    db.close()
+
+
+if __name__ == '__main__':
+    main()
