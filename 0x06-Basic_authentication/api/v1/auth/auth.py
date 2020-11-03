@@ -17,12 +17,14 @@ class Auth:
             return True
         if path[-1] != '/':
             path += '/'
-        return not path in excluded_paths
+        return path not in excluded_paths
 
     def authorization_header(self, request=None) -> str:
-        """Return None
+        """Return authorization header
         """
-        return None
+        if not request:
+            return None
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
         """Return None
