@@ -3,7 +3,9 @@
 BasicAuth class to manage API authentication
 """
 from api.v1.auth.auth import Auth
+from models.user import User
 import base64
+from typing import TypeVar
 
 
 class BasicAuth(Auth):
@@ -37,3 +39,11 @@ class BasicAuth(Auth):
             return (None, None)
         return (decoded_base64_authorization_header.split(':')[0],
                 decoded_base64_authorization_header.split(':')[1])
+
+    def user_object_from_credentials(
+            self, user_email: str, user_pwd: str) -> TypeVar('User'):
+        """Return the User instance based on email and password
+        """
+        for u in User.search({'email': user_email}):
+            if u.is_valid_password(user_pwd):
+                return u
