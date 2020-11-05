@@ -45,7 +45,8 @@ class BasicAuth(Auth):
         """Return the User instance based on email and password
         """
         if (user_email and user_pwd and isinstance(user_email, str) and
-                isinstance(user_pwd, str)):
+                isinstance(user_pwd, str) and
+                User.search({'email': user_email})):
             for u in User.search({'email': user_email}):
                 if u.is_valid_password(user_pwd):
                     return u
