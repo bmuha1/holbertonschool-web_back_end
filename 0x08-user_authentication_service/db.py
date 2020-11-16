@@ -14,6 +14,8 @@ class DB:
     """
     DB class
     """
+    valid_args = ['id', 'email', 'hashed_password',
+                  'session_id', 'reset_token']
 
     def __init__(self):
         """
@@ -44,14 +46,26 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs) -> User:
+        """
+        Return the first row in the users table after filtering
+        """
         if not kwargs:
             raise InvalidRequestError
-        valid_args = ['id', 'email', 'hashed_password',
-                      'session_id', 'reset_token']
         for arg in kwargs:
-            if arg not in valid_args:
+            if arg not in self.valid_args:
                 raise InvalidRequestError
         user = self._session.query(User).filter_by(**kwargs).first()
         if not user:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+        Update user attributes
+        """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if key not in self.valid_args:
+                raise ValueError
+            setattr(user, key, value)
+        self._session.commit()
