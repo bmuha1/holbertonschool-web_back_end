@@ -57,7 +57,7 @@ class Auth:
 
     def create_session(self, email: str) -> str:
         """
-        Create new session
+        Create new session and return the session ID
         """
         try:
             user = self._db.find_user_by(email=email)
