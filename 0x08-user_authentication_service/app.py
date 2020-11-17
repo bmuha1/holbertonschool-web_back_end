@@ -67,12 +67,12 @@ def logout():
       - destroy session and redirect to GET /
       - 403 if user doesn't exist
     """
-    session_id = request.cookies.get('session_id')
-    user = AUTH.get_user_from_session_id(session_id)
-    if user:
+    try:
+        session_id = request.cookies.get('session_id')
+        user = AUTH.get_user_from_session_id(session_id)
         AUTH.destroy_session(user.id)
         return redirect('/')
-    else:
+    except Exception:
         abort(403)
 
 
