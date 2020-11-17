@@ -91,7 +91,7 @@ class Auth:
         except Exception:
             return
 
-    def get_reset_password_token(email: str) -> str:
+    def get_reset_password_token(self, email: str) -> str:
         """
         Create a new password reset token
         """
