@@ -58,5 +58,23 @@ def login():
     return response
 
 
+@app.route('/sessions', methods=['DELETE'])
+def logout():
+    """ DELETE /sessions
+    JSON body:
+      - session_id
+    Return:
+      - destroy session and redirect to GET /
+      - 403 if user doesn't exist
+    """
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    try:
+        AUTH.destroy_session(user.id)
+        return redirect('/')
+    except Exception:
+        abort(403)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
