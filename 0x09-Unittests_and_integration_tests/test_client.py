@@ -83,6 +83,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         """
         config = {
             'return_value.json.side_effect': [
+                cls.org_payload, cls.repos_payload,
                 cls.org_payload, cls.repos_payload
             ]
         }
@@ -95,6 +96,29 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         Tear down class
         """
         cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """
+        Test public_repos
+        """
+        g = client.GithubOrgClient('test')
+        self.assertEqual(g.org, self.org_payload)
+        self.assertEqual(g.repos_payload, self.repos_payload)
+        self.assertEqual(g.public_repos(), self.expected_repos)
+        self.assertEqual(g.public_repos('test'), [])
+        self.mock.assert_called()
+
+    def test_public_repos_with_license(self):
+        """
+        Test public_repos with license 'apache-2.0'
+        """
+        g = client.GithubOrgClient('test')
+        self.assertEqual(g.org, self.org_payload)
+        self.assertEqual(g.repos_payload, self.repos_payload)
+        self.assertEqual(g.public_repos(), self.expected_repos)
+        self.assertEqual(g.public_repos('test'), [])
+        self.assertEqual(g.public_repos('apache-2.0'), self.apache2_repos)
+        self.mock.assert_called()
 
 
 if __name__ == '__main__':
