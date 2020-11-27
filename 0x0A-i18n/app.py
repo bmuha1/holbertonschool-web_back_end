@@ -38,7 +38,7 @@ def hello():
     Return:
       - Render template
     """
-    time = format_datetime(datetime.now(), locale=get_locale())
+    time = format_datetime(datetime.now(get_timezone()), locale=get_locale())
     return render_template('index.html', user=g.user, current_time=time)
 
 
