@@ -4,7 +4,7 @@ Redis basic
 '''
 import redis
 import uuid
-from typing import Union
+from typing import Union, Optional, Callable
 
 
 class Cache:
@@ -25,3 +25,12 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.mset({key: data})
         return key
+
+    def get(self, key: str, fn: Optional[Callable] = None) -> Union[
+            str, bytes, int, float]:
+        '''
+        Convert data to the desired format
+        '''
+        if fn:
+            return fn(self._redis.get(key))
+        return self._redis.get(key)
