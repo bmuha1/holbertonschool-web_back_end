@@ -51,3 +51,15 @@ class Cache:
         if fn:
             return fn(self._redis.get(key))
         return self._redis.get(key)
+
+    def get_str(self, data: str) -> str:
+        '''
+        Convert data to string
+        '''
+        return self._redis.get(data).decode('utf-8')
+
+    def get_int(self, data: str) -> int:
+        '''
+        Convert data to int
+        '''
+        return int(self._redis.get(data))
